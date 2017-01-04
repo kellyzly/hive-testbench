@@ -30,8 +30,6 @@ set hive.optimize.index.filter=true;
 set hive.optimize.reducededuplication.min.reducer=4;
 set hive.optimize.reducededuplication=true;
 set hive.orc.splits.include.file.footer=false;
-set hive.security.authorization.enabled=false;
-set hive.security.metastore.authorization.manager=org.apache.hadoop.hive.ql.security.authorization.StorageBasedAuthorizationProvider;
 set hive.server2.enable.doAs=false;
 set hive.server2.tez.default.queues=default;
 set hive.server2.tez.initialize.default.sessions=false;
@@ -51,7 +49,7 @@ set hive.vectorized.groupby.maxentries=1024;
 -- set hive.tez.java.opts=-Xmx3800m;
 -- set hive.auto.convert.join.noconditionaltask.size=320000000;
 
-set hive.execution.engine=tez;
+set hive.execution.engine=spark;
 set hive.default.fileformat=orc;
 set hive.cbo.enable=true;
 set hive.stats.fetch.column.stats=true;

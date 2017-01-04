@@ -3,13 +3,16 @@
 use strict;
 use warnings;
 use File::Basename;
-
+use Time::Piece;
 # PROTOTYPES
 sub dieWithUsage(;$);
 
 # GLOBALS
 my $SCRIPT_NAME = basename( __FILE__ );
 my $SCRIPT_PATH = dirname( __FILE__ );
+my $logfile = 'log.ds';
+my $outstream;
+open $outstream, '>>', $logfile;
 
 # MAIN
 dieWithUsage("one or more parameters not defined") unless @ARGV >= 1;
@@ -29,11 +32,12 @@ my $db = {
 	'tpcds' => "tpcds_bin_partitioned_orc_$scale",
 	'tpch' => "tpch_flat_orc_$scale"
 };
-
-print "filename,status,time,rows\n";
+my $starttime = localtime->strftime('%Y/%m/%d %H:%M:%S');
+print { $outstream } "start time:$starttime\n"; 
+print { $outstream } "filename,status,time,rows\n";
 for my $query ( @queries ) {
 	my $logname = "$query.log";
-	my $cmd="echo 'use $db->{${suite}}; source $query;' | hive -i testbench.settings 2>&1  | tee $query.log";
+	my $cmd="echo 'use $db->{${suite}}; source $query;' | hive -i testbench.settings --hiveconf spark.app.name=$query 2>&1  | tee $query.log";
 #	my $cmd="cat $query.log";
 	#print $cmd ; exit;
 	
@@ -46,16 +50,19 @@ for my $query ( @queries ) {
 	my $hiveTime = $hiveEnd - $hiveStart;
 	foreach my $line ( @hiveoutput ) {
 		if( $line =~ /Time taken:\s+([\d\.]+)\s+seconds,\s+Fetched:\s+(\d+)\s+row/ ) {
-			print "$query,success,$hiveTime,$2\n"; 
+			print { $outstream } "$query,success,$hiveTime,$2\n"; 
 		} elsif( 
 			$line =~ /^FAILED: /
 			# || /Task failed!/ 
 			) {
-			print "$query,failed,$hiveTime\n"; 
+			print { $outstream } "$query,failed,$hiveTime\n"; 
 		} # end if
 	} # end while
 } # end for
 
+my $endtime = localtime->strftime('%Y/%m/%d %H:%M:%S');
+print { $outstream } "end time:$endtime\n"; 
+close $outstream;
 
 sub dieWithUsage(;$) {
 	my $err = shift || '';
