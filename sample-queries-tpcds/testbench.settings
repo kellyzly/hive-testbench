@@ -59,3 +59,4 @@ set hive.exec.reducers.bytes.per.reducer=100000000;
 set hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DummyTxnManager;
 set hive.support.concurrency=false;
 set hive.tez.exec.print.summary=true;
+set hive.mapred.mode=nonstrict;
