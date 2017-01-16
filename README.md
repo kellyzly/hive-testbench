@@ -81,7 +81,25 @@ All of these steps should be carried out on your Hadoop cluster.
   	hive -i testbench.settings
   	hive> use tpch_flat_orc_1000;
   	hive> source tpch_query1.sql;
-  	```
+MODIFICATION
+============
+
+0. download DS project in https://github.com/kellyzly/hive-testbench 
+
+1.   build TPC-DS
+     #./tpcds-build.sh
+
+2. generate  100 GB of TPC-DS data:
+     #./tpcds-setup 100
+
+3. run queries and all infomation in log.ds
+     #setsid  ./runSuite.pl tpcds 100   (setsid will put the command in background)
+     #tail  -f log.ds
+          start time:2017/01/03 23:36:57
+filename,    status, time, rows
+query12.sql, success, 63,  100
+query13.sql, success, 146,  1
+query15.sql, success, 83,  100
 
 Feedback
 ========
