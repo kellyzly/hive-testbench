@@ -110,6 +110,6 @@ do
 	i=`expr $i + 1`
 done
 
-make -j 2 -f $LOAD_FILE
+make -j 1 -f $LOAD_FILE
 
 echo "Data loaded into database ${DATABASE}."

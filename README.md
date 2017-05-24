@@ -91,6 +91,8 @@ MODIFICATION
 
 2. generate  100 GB of TPC-DS data:
      #./tpcds-setup 100
+     if generate data in parquet,
+     #FORMAT=parquet ./tpcds-setup 100
 
 3. run queries and all infomation in log.ds
      #setsid  ./runSuite.pl tpcds 100   (setsid will put the command in background)
@@ -101,6 +103,14 @@ query12.sql, success, 63,  100
 query13.sql, success, 146,  1
 query15.sql, success, 83,  100
 
+SKILL
+=====
+0. print more info in data generation: DEBUG_SCRIPT="debug.log" FORMAT=parquet ./tpcds-setup.sh 6 # if you want to see more info, please add DEBUG_SCRIPT
+1. decrease parallelism.  in load_xxx_xx.mk
+```
+  -make -j 2 -f $LOAD_FILE
+  +make -j 1 -f $LOAD_FILE
+``` 
 Feedback
 ========
 

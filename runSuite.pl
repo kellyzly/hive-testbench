@@ -29,8 +29,8 @@ if( $suite eq 'tpcds' ) {
 my @queries = glob '*.sql';
 
 my $db = { 
-	'tpcds' => "tpcds_bin_partitioned_orc_$scale",
-	'tpch' => "tpch_flat_orc_$scale"
+	'tpcds' => "tpcds_bin_partitioned_parquet_$scale",
+	'tpch' => "tpch_flat_parquet_$scale"
 };
 my $starttime = localtime->strftime('%Y/%m/%d %H:%M:%S');
 print { $outstream } "start time:$starttime\n"; 
