@@ -83,14 +83,15 @@ All of these steps should be carried out on your Hadoop cluster.
   	hive> source tpch_query1.sql;
 MODIFICATION
 ============
-
 0. download DS project in https://github.com/kellyzly/hive-testbench 
 
 1.   build TPC-DS
      #./tpcds-build.sh
 
 2. generate  100 GB of TPC-DS data:
-     #./tpcds-setup 100
+2.0  if you have generate the database before, but the data in tpcds_text_xxx is invalid,please
+     hadoop fs -rmr /tmp/tpcds-generate/$scale
+2.2     #./tpcds-setup 100
      if generate data in parquet,
      #FORMAT=parquet ./tpcds-setup 100
 
