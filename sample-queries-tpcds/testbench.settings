@@ -60,3 +60,6 @@ set hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DummyTxnManager;
 set hive.support.concurrency=false;
 set hive.tez.exec.print.summary=true;
 set hive.mapred.mode=nonstrict;
+
+--add by zhang,liyun
+set hive.optimize.sampling.orderby=true;
