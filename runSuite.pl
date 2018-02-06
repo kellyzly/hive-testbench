@@ -18,6 +18,7 @@ open $outstream, '>>', $logfile;
 dieWithUsage("one or more parameters not defined") unless @ARGV >= 1;
 my $suite = shift;
 my $scale = shift || 2;
+my $number = shift;
 dieWithUsage("suite name required") unless $suite eq "tpcds" or $suite eq "tpch";
 
 chdir $SCRIPT_PATH;
@@ -26,7 +27,13 @@ if( $suite eq 'tpcds' ) {
 } else {
 	chdir 'sample-queries-tpch';
 } # end if
-my @queries = glob '*.sql';
+#my @queries = glob '*.sql';
+my @queries = ();
+if ( $number ) {
+    push @queries, split(',',$number);
+} else {
+    push @queries, glob '*.sql';
+}
 
 my $db = { 
 	'tpcds' => "tpcds_bin_partitioned_parquet_$scale",
@@ -51,6 +58,10 @@ for my $query ( @queries ) {
 	foreach my $line ( @hiveoutput ) {
 		if( $line =~ /Time taken:\s+([\d\.]+)\s+seconds,\s+Fetched:\s+(\d+)\s+row/ ) {
 			print { $outstream } "$query,success,$hiveTime,$2\n"; 
+                }
+		 elsif( $line =~ /Time taken:\s+([\d\.]+)\s+seconds\s+/ ) { 
+                        print { $outstream } "$query,success,$hiveTime,$2\n"; 
+                        $flag = 1;
 		} elsif( 
 			$line =~ /^FAILED: /
 			# || /Task failed!/ 
